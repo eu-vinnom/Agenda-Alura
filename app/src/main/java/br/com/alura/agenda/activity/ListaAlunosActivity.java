@@ -2,14 +2,14 @@ package br.com.alura.agenda.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import br.com.alura.agenda.R;
@@ -22,6 +22,7 @@ public class ListaAlunosActivity extends AppCompatActivity{
 	public static final int LISTA_SIMPLES = android.R.layout.simple_list_item_1;
 	public static final String CHAVE_ALUNO = "aluno";
 	private AlunoDao alunoDao = new AlunoDao();
+	private ArrayAdapter<Aluno> listaAdapter;
 	private Intent daListaProForm;
 
 	@Override
@@ -33,18 +34,36 @@ public class ListaAlunosActivity extends AppCompatActivity{
 		alunoDao.salva(new Aluno("ka", "123456789", "ka@ka.com.br"));
 
 		defineFabNovoAluno();
+		listaAlunos();
 	}
 
 	@Override
 	protected void onResume(){
 		super.onResume();
-		daListaProForm = new Intent(ListaAlunosActivity.this, FormularioAlunoActivity.class);
-		listaAlunos();
+		daListaProForm = geraIntentProForm();
+		atualizaLista();
 	}
 
 	private void defineFabNovoAluno(){
 		FloatingActionButton novoAluno = findViewById(R.id.lista_alunos_fab);
 		abreFormularioNovoAluno(novoAluno);
+	}
+
+	private void listaAlunos(){
+		ListView listView = findViewById(R.id.lista_alunos_listView);
+		defineListaAdapter(listView);
+		registerForContextMenu(listView);
+
+		abreFormularioEditaAluno(listView);
+	}
+
+	private Intent geraIntentProForm(){
+		return new Intent(ListaAlunosActivity.this, FormularioAlunoActivity.class);
+	}
+
+	private void atualizaLista(){
+		listaAdapter.clear();
+		listaAdapter.addAll(alunoDao.listagem());
 	}
 
 	private void abreFormularioNovoAluno(FloatingActionButton novoAluno){
@@ -56,14 +75,6 @@ public class ListaAlunosActivity extends AppCompatActivity{
 		});
 	}
 
-	private void listaAlunos(){
-		ListView listView = findViewById(R.id.lista_alunos_listView);
-		List<Aluno> alunos = alunoDao.listagem();
-		listView.setAdapter(new ArrayAdapter<>(this, LISTA_SIMPLES, alunos));
-
-		abreFormularioEditaAluno(listView);
-	}
-
 	private void abreFormularioEditaAluno(ListView listView){
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 			@Override
@@ -73,5 +84,38 @@ public class ListaAlunosActivity extends AppCompatActivity{
 				startActivity(daListaProForm);
 			}
 		});
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+		super.onCreateContextMenu(menu, v, menuInfo);
+		getMenuInflater().inflate(R.menu.activity_lista_alunos_menu, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item){
+		defineMenuDeContextoRemover(item);
+		return super.onContextItemSelected(item);
+	}
+
+	private void defineMenuDeContextoRemover(MenuItem item){
+		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+		int itemId = item.getItemId();
+
+		if(itemId == R.id.activity_lista_alunos_menu_remover){
+			Aluno aluno = listaAdapter.getItem(menuInfo.position);
+			remove(aluno);
+		}
+	}
+
+	private void defineListaAdapter(ListView listView){
+		listaAdapter = new ArrayAdapter<>(this, LISTA_SIMPLES);
+		listView.setAdapter(listaAdapter);
+	}
+
+	private void remove(Aluno aluno){
+		listaAdapter.remove(aluno);
+		alunoDao.remove(aluno);
 	}
 }
