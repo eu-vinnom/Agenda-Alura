@@ -1,6 +1,7 @@
 package br.com.alura.agenda.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
@@ -61,5 +62,13 @@ public class Aluno implements Serializable{
 
 	public boolean temIdValido(){
 		return id > 0;
+	}
+
+	public boolean naoEhNulo(){
+		if(getNome().isEmpty()){
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
