@@ -7,8 +7,8 @@ import br.com.alura.agenda.model.Aluno;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,7 +30,6 @@ public class FormularioAlunoActivity extends AppCompatActivity{
 		setContentView(R.layout.activity_formulario_aluno);
 
 		defineCampos();
-		acaoDoBotaoSalvar();
 	}
 
 	private void defineCampos(){
@@ -40,20 +39,50 @@ public class FormularioAlunoActivity extends AppCompatActivity{
 
 		Intent dadosAluno = getIntent();
 		defineFormularioEditaOuSalva(dadosAluno);
-
 	}
 
 	private void defineFormularioEditaOuSalva(Intent dadosAluno){
 		if(dadosAluno.hasExtra(CHAVE_ALUNO)){
 			setTitle(TITULO_APPBAR_EDITA_ALUNO);
-			aluno = (Aluno) dadosAluno.getSerializableExtra(CHAVE_ALUNO);
-			campoNome.setText(aluno.getNome());
-			campoTelefone.setText(aluno.getTelefone());
-			campoEmail.setText(aluno.getEmail());
+			recupera(dadosAluno);
 		} else{
 			setTitle(TITULO_APPBAR_NOVO_ALUNO);
 			aluno = new Aluno();
 		}
+	}
+
+	private void recupera(Intent dadosAluno){
+		aluno = (Aluno) dadosAluno.getSerializableExtra(CHAVE_ALUNO);
+		campoNome.setText(aluno.getNome());
+		campoTelefone.setText(aluno.getTelefone());
+		campoEmail.setText(aluno.getEmail());
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		getMenuInflater().inflate(R.menu.activity_formulario_aluno_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		if(item.getItemId() == R.id.activity_formulario_aluno_menu_salvar){
+			finalizaFormulario();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void finalizaFormulario(){
+		defineAluno();
+		if(aluno.naoEhNulo()){
+			if(aluno.temIdValido()){
+				editaAluno();
+			} else{
+				salvaAluno();
+			}
+			finish();
+		}
+		Toast.makeText(this, "Campo nome é obrigatório!", Toast.LENGTH_SHORT).show();
 	}
 
 	private void defineAluno(){
@@ -65,26 +94,6 @@ public class FormularioAlunoActivity extends AppCompatActivity{
 		aluno.setNome(nome);
 		aluno.setTelefone(telefone);
 		aluno.setEmail(email);
-	}
-
-	private void acaoDoBotaoSalvar(){
-		Button botaoSalvar = findViewById(R.id.activity_formulario_aluno_botao_salvar);
-		botaoSalvar.setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View view){
-				finalizaFormulario();
-			}
-		});
-	}
-
-	private void finalizaFormulario(){
-		defineAluno();
-		if(aluno.temIdValido()){
-			editaAluno();
-		}else{
-			salvaAluno();
-		}
-		finish();
 	}
 
 	private void salvaAluno(){
