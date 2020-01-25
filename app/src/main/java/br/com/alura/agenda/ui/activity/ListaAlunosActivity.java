@@ -1,4 +1,4 @@
-package br.com.alura.agenda.activity;
+package br.com.alura.agenda.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import br.com.alura.agenda.R;
 import br.com.alura.agenda.dao.AlunoDao;
 import br.com.alura.agenda.model.Aluno;
+import br.com.alura.agenda.ui.adapter.ListaAlunoAdapter;
 
 public class ListaAlunosActivity extends AppCompatActivity{
 
@@ -22,7 +24,7 @@ public class ListaAlunosActivity extends AppCompatActivity{
 	public static final int LISTA_SIMPLES = android.R.layout.simple_list_item_1;
 	public static final String CHAVE_ALUNO = "aluno";
 	private AlunoDao alunoDao = new AlunoDao();
-	private ArrayAdapter<Aluno> listaAdapter;
+	private ListaAlunoAdapter listaAdapter;
 	private Intent daListaProForm;
 
 	@Override
@@ -62,8 +64,7 @@ public class ListaAlunosActivity extends AppCompatActivity{
 	}
 
 	private void atualizaLista(){
-		listaAdapter.clear();
-		listaAdapter.addAll(alunoDao.listagem());
+		listaAdapter.atualizaAdapter();
 	}
 
 	private void abreFormularioNovoAluno(FloatingActionButton novoAluno){
@@ -110,7 +111,7 @@ public class ListaAlunosActivity extends AppCompatActivity{
 	}
 
 	private void defineListaAdapter(ListView listView){
-		listaAdapter = new ArrayAdapter<>(this, LISTA_SIMPLES);
+		listaAdapter = new ListaAlunoAdapter(this);
 		listView.setAdapter(listaAdapter);
 	}
 

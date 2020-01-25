@@ -1,4 +1,4 @@
-package br.com.alura.agenda.activity;
+package br.com.alura.agenda.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import br.com.alura.agenda.R;
@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import static br.com.alura.agenda.activity.ListaAlunosActivity.CHAVE_ALUNO;
+import static br.com.alura.agenda.ui.activity.ListaAlunosActivity.CHAVE_ALUNO;
 
 public class FormularioAlunoActivity extends AppCompatActivity{
 
