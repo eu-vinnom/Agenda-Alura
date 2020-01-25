@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import br.com.alura.agenda.R;
 import br.com.alura.agenda.dao.AlunoDao;
 import br.com.alura.agenda.model.Aluno;
+import br.com.alura.agenda.ui.activity.component.FormularioAlunoActivityComponent;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,24 +19,22 @@ public class FormularioAlunoActivity extends AppCompatActivity{
 
 	private static final String TITULO_APPBAR_NOVO_ALUNO = "Novo Aluno";
 	private static final String TITULO_APPBAR_EDITA_ALUNO = "Edita Aluno";
-	private final AlunoDao alunoDao = new AlunoDao();
-	private EditText campoNome;
-	private EditText campoTelefone;
-	private EditText campoEmail;
-	private Aluno aluno;
+	private FormularioAlunoActivityComponent component;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_formulario_aluno);
 
+		component = new FormularioAlunoActivityComponent(this, this);
+
 		defineCampos();
 	}
 
 	private void defineCampos(){
-		campoNome = findViewById(R.id.activity_formulario_aluno_nome);
-		campoTelefone = findViewById(R.id.activity_formulario_aluno_telefone);
-		campoEmail = findViewById(R.id.activity_formulario_aluno_email);
+		component.setCampoNome(findViewById(R.id.activity_formulario_aluno_nome));
+		component.setCampoTelefone(findViewById(R.id.activity_formulario_aluno_telefone));
+		component.setCampoEmail(findViewById(R.id.activity_formulario_aluno_email));
 
 		Intent dadosAluno = getIntent();
 		defineFormularioEditaOuSalva(dadosAluno);
@@ -44,19 +43,13 @@ public class FormularioAlunoActivity extends AppCompatActivity{
 	private void defineFormularioEditaOuSalva(Intent dadosAluno){
 		if(dadosAluno.hasExtra(CHAVE_ALUNO)){
 			setTitle(TITULO_APPBAR_EDITA_ALUNO);
-			recupera(dadosAluno);
+			component.recupera(dadosAluno);
 		} else{
 			setTitle(TITULO_APPBAR_NOVO_ALUNO);
-			aluno = new Aluno();
+			component.setAluno(new Aluno());
 		}
 	}
 
-	private void recupera(Intent dadosAluno){
-		aluno = (Aluno) dadosAluno.getSerializableExtra(CHAVE_ALUNO);
-		campoNome.setText(aluno.getNome());
-		campoTelefone.setText(aluno.getTelefone());
-		campoEmail.setText(aluno.getEmail());
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -67,44 +60,10 @@ public class FormularioAlunoActivity extends AppCompatActivity{
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		if(item.getItemId() == R.id.activity_formulario_aluno_menu_salvar){
-			finalizaFormulario();
+			component.finalizaFormulario();
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void finalizaFormulario(){
-		defineAluno();
-		if(aluno.naoEhNulo()){
-			if(aluno.temIdValido()){
-				editaAluno();
-			} else{
-				salvaAluno();
-			}
-			finish();
-		}
-		Toast.makeText(this, "Campo nome é obrigatório!", Toast.LENGTH_SHORT).show();
-	}
 
-	private void defineAluno(){
-
-		String nome = campoNome.getText().toString();
-		String telefone = campoTelefone.getText().toString();
-		String email = campoEmail.getText().toString();
-
-		aluno.setNome(nome);
-		aluno.setTelefone(telefone);
-		aluno.setEmail(email);
-	}
-
-	private void salvaAluno(){
-		alunoDao.salva(aluno);
-		Toast.makeText(FormularioAlunoActivity.this, "Aluno " + aluno.getNome() + " salvo!",
-			Toast.LENGTH_SHORT).show();
-	}
-
-	private void editaAluno(){
-		alunoDao.edita(aluno);
-		Toast.makeText(FormularioAlunoActivity.this, "Aluno " + aluno.getNome() + " editado!",
-			Toast.LENGTH_SHORT).show();
-	}
 }
