@@ -1,17 +1,17 @@
 package br.com.alura.agenda.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import br.com.alura.agenda.R;
 import br.com.alura.agenda.dao.AlunoDao;
@@ -32,8 +32,6 @@ public class ListaAlunosActivity extends AppCompatActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lista_alunos);
 		setTitle(TITULO_APPBAR);
-		alunoDao.salva(new Aluno("vi", "123456789", "vi@vi.com.br"));
-		alunoDao.salva(new Aluno("ka", "123456789", "ka@ka.com.br"));
 
 		defineFabNovoAluno();
 		listaAlunos();
@@ -100,14 +98,29 @@ public class ListaAlunosActivity extends AppCompatActivity{
 	}
 
 	private void defineMenuDeContextoRemover(MenuItem item){
-		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		final AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
 		int itemId = item.getItemId();
 
 		if(itemId == R.id.activity_lista_alunos_menu_remover){
-			Aluno aluno = listaAdapter.getItem(menuInfo.position);
-			remove(aluno);
+			geraDialogoRemocaoAluno(menuInfo);
 		}
+	}
+
+	private void geraDialogoRemocaoAluno(final AdapterView.AdapterContextMenuInfo menuInfo){
+		new AlertDialog.Builder(this)
+			.setTitle("Removendo aluno")
+			.setMessage("Gostaria de remover o aluno?")
+			.setPositiveButton("SIM", new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i){
+					Aluno aluno = listaAdapter.getItem(menuInfo.position);
+					remove(aluno);
+				}
+			})
+			.setNegativeButton("NÃO", null)
+			.create()
+			.show();
 	}
 
 	private void defineListaAdapter(ListView listView){
