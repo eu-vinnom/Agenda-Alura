@@ -16,15 +16,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import br.com.alura.agenda.R;
 import br.com.alura.agenda.dao.AlunoDao;
 import br.com.alura.agenda.model.Aluno;
+import br.com.alura.agenda.ui.activity.component.ListaAlunosActivityComponent;
 import br.com.alura.agenda.ui.adapter.ListaAlunoAdapter;
 
 public class ListaAlunosActivity extends AppCompatActivity{
 
 	private static final String TITULO_APPBAR = "Lista de Alunos";
 	public static final String CHAVE_ALUNO = "aluno";
-	private final AlunoDao alunoDao = new AlunoDao();
-	private ListaAlunoAdapter listaAdapter;
 	private Intent daListaProForm;
+	private ListaAlunosActivityComponent component;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -32,6 +32,7 @@ public class ListaAlunosActivity extends AppCompatActivity{
 		setContentView(R.layout.activity_lista_alunos);
 		setTitle(TITULO_APPBAR);
 
+		component = new ListaAlunosActivityComponent(this);
 		defineFabNovoAluno();
 		listaAlunos();
 	}
@@ -40,7 +41,7 @@ public class ListaAlunosActivity extends AppCompatActivity{
 	protected void onResume(){
 		super.onResume();
 		daListaProForm = geraIntentProForm();
-		atualizaLista();
+		component.atualizaLista();
 	}
 
 	private void defineFabNovoAluno(){
@@ -50,7 +51,7 @@ public class ListaAlunosActivity extends AppCompatActivity{
 
 	private void listaAlunos(){
 		ListView listView = findViewById(R.id.lista_alunos_listView);
-		defineListaAdapter(listView);
+		component.defineListaAdapter(listView);
 		registerForContextMenu(listView);
 
 		abreFormularioEditaAluno(listView);
@@ -60,27 +61,15 @@ public class ListaAlunosActivity extends AppCompatActivity{
 		return new Intent(ListaAlunosActivity.this, FormularioAlunoActivity.class);
 	}
 
-	private void atualizaLista(){
-		listaAdapter.atualizaAdapter();
-	}
-
 	private void abreFormularioNovoAluno(FloatingActionButton novoAluno){
-		novoAluno.setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View view){
-				startActivity(daListaProForm);
-			}
-		});
+		novoAluno.setOnClickListener(view -> startActivity(daListaProForm));
 	}
 
 	private void abreFormularioEditaAluno(ListView listView){
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view, int posicao, long id){
-				Aluno aluno = (Aluno) adapterView.getItemAtPosition(posicao);
-				daListaProForm.putExtra(CHAVE_ALUNO, aluno);
-				startActivity(daListaProForm);
-			}
+		listView.setOnItemClickListener((adapterView, view, posicao, id) -> {
+			Aluno aluno = (Aluno) adapterView.getItemAtPosition(posicao);
+			daListaProForm.putExtra(CHAVE_ALUNO, aluno);
+			startActivity(daListaProForm);
 		});
 	}
 
@@ -92,43 +81,8 @@ public class ListaAlunosActivity extends AppCompatActivity{
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item){
-		defineMenuDeContextoRemover(item);
+		component.defineMenuDeContextoRemover(item);
 		return super.onContextItemSelected(item);
 	}
 
-	private void defineMenuDeContextoRemover(MenuItem item){
-		final AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-		int itemId = item.getItemId();
-
-		if(itemId == R.id.activity_lista_alunos_menu_remover){
-			geraDialogoRemocaoAluno(menuInfo);
-		}
-	}
-
-	private void geraDialogoRemocaoAluno(final AdapterView.AdapterContextMenuInfo menuInfo){
-		new AlertDialog.Builder(this)
-			.setTitle("Removendo aluno")
-			.setMessage("Gostaria de remover o aluno?")
-			.setPositiveButton("SIM", new DialogInterface.OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i){
-					Aluno aluno = listaAdapter.getItem(menuInfo.position);
-					remove(aluno);
-				}
-			})
-			.setNegativeButton("NÃO", null)
-			.create()
-			.show();
-	}
-
-	private void defineListaAdapter(ListView listView){
-		listaAdapter = new ListaAlunoAdapter(this);
-		listView.setAdapter(listaAdapter);
-	}
-
-	private void remove(Aluno aluno){
-		listaAdapter.remove(aluno);
-		alunoDao.remove(aluno);
-	}
 }
