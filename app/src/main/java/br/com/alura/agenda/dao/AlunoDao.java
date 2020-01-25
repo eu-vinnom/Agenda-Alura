@@ -7,7 +7,7 @@ import br.com.alura.agenda.model.Aluno;
 
 public class AlunoDao{
 
-	private static List<Aluno> alunos = new ArrayList<>();
+	private static final List<Aluno> alunos = new ArrayList<>();
 	private static int id = 1;
 
 	public List<Aluno> listagem(){
@@ -20,8 +20,8 @@ public class AlunoDao{
 		atualizaId();
 	}
 
-	private int atualizaId(){
-		return id++;
+	private void atualizaId(){
+		id++;
 	}
 
 	public void edita(Aluno aluno){

@@ -20,10 +20,9 @@ import br.com.alura.agenda.ui.adapter.ListaAlunoAdapter;
 
 public class ListaAlunosActivity extends AppCompatActivity{
 
-	public static final String TITULO_APPBAR = "Lista de Alunos";
-	public static final int LISTA_SIMPLES = android.R.layout.simple_list_item_1;
+	private static final String TITULO_APPBAR = "Lista de Alunos";
 	public static final String CHAVE_ALUNO = "aluno";
-	private AlunoDao alunoDao = new AlunoDao();
+	private final AlunoDao alunoDao = new AlunoDao();
 	private ListaAlunoAdapter listaAdapter;
 	private Intent daListaProForm;
 

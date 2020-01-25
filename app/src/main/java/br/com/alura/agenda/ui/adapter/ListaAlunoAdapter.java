@@ -17,13 +17,13 @@ import br.com.alura.agenda.model.Aluno;
 public class ListaAlunoAdapter extends BaseAdapter{
 
 	private final AlunoDao alunoDao = new AlunoDao();
-	private List<Aluno> alunos = new ArrayList<>(alunoDao.listagem());
+	private final List<Aluno> alunos = new ArrayList<>(alunoDao.listagem());
 
 	public ListaAlunoAdapter(Context context){
 		this.context = context;
 	}
 
-	private Context context;
+	private final Context context;
 
 	@Override
 	public int getCount(){
@@ -42,9 +42,8 @@ public class ListaAlunoAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(int posicao, View view, ViewGroup viewGroup){
-		View alunoItemView = defineAlunoItemView(posicao, viewGroup);
 
-		return alunoItemView;
+		return defineAlunoItemView(posicao, viewGroup);
 	}
 
 	private View defineAlunoItemView(int posicao, ViewGroup viewGroup){
