@@ -21,6 +21,7 @@ public class FormularioAlunoActivityComponent{
 	private Activity activity;
 	private AlunoDao alunoDao;
 	private Context context;
+	private EditText campoSobrenome;
 
 	public FormularioAlunoActivityComponent(Activity activity, Context context){
 		this.activity = activity;
@@ -44,10 +45,12 @@ public class FormularioAlunoActivityComponent{
 	private void defineAluno(){
 
 		String nome = campoNome.getText().toString();
+		String sobrenome = campoSobrenome.getText().toString();
 		String telefone = campoTelefone.getText().toString();
 		String email = campoEmail.getText().toString();
 
 		aluno.setNome(nome);
+		aluno.setSobrenome(sobrenome);
 		aluno.setTelefone(telefone);
 		aluno.setEmail(email);
 	}
@@ -73,6 +76,10 @@ public class FormularioAlunoActivityComponent{
 
 	public void setCampoNome(EditText campoNome){
 		this.campoNome = campoNome;
+	}
+
+	public void setCampoSobrenome(EditText campoSobrenome){
+		this.campoSobrenome = campoSobrenome;
 	}
 
 	public void setCampoTelefone(EditText campoTelefone){

@@ -30,6 +30,7 @@ public class FormularioAlunoActivity extends AppCompatActivity{
 
 	private void defineCampos(){
 		component.setCampoNome(findViewById(R.id.activity_formulario_aluno_nome));
+		component.setCampoSobrenome(findViewById(R.id.activity_formulario_aluno_sobrenome));
 		component.setCampoTelefone(findViewById(R.id.activity_formulario_aluno_telefone));
 		component.setCampoEmail(findViewById(R.id.activity_formulario_aluno_email));
 
