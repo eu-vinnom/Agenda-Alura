@@ -53,8 +53,8 @@ public class ListaAlunoAdapter extends BaseAdapter{
 		Aluno aluno = alunos.get(posicao);
 		View alunoItemView = LayoutInflater.from(context).inflate(R.layout.item_aluno, viewGroup, false);
 
-		TextView nomeCompleto = alunoItemView.findViewById(R.id.item_aluno_nome);
-		nomeCompleto.setText(aluno.getNomeCompleto());
+		TextView nome = alunoItemView.findViewById(R.id.item_aluno_nome);
+		nome.setText(aluno.getNome());
 
 		TextView telefone = alunoItemView.findViewById(R.id.item_aluno_telefone);
 		telefone.setText(aluno.getTelefone());

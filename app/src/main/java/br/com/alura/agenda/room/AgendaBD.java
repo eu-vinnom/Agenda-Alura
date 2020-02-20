@@ -10,17 +10,26 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import br.com.alura.agenda.model.Aluno;
 
-@Database(entities = {Aluno.class}, version = 2, exportSchema = false)
+@Database(entities = {Aluno.class}, version = 3, exportSchema = false)
 public abstract class AgendaBD extends RoomDatabase{
 
 	public static AgendaBD getInstance(Context contexto){
 		return Room.
 			databaseBuilder(contexto, AgendaBD.class, "agenda.db").
 			allowMainThreadQueries().
-			addMigrations(new Migration(1,2){
+			addMigrations(new Migration(1, 2){
 				@Override
 				public void migrate(@NonNull SupportSQLiteDatabase database){
 					database.execSQL("ALTER TABLE `Aluno` ADD COLUMN `sobrenome` TEXT");
+				}
+			}, new Migration(2, 3){
+				@Override
+				public void migrate(@NonNull SupportSQLiteDatabase database){
+					database.execSQL(
+						"CREATE TABLE IF NOT EXISTS `Aluno_novo` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome` TEXT, `telefone` TEXT, `email` TEXT)");
+					database.execSQL("INSERT INTO `Aluno_novo` SELECT `id`, `nome`, `telefone`, `email`  FROM `Aluno`");
+					database.execSQL("DROP TABLE IF EXISTS `Aluno`");
+					database.execSQL("ALTER TABLE `Aluno_novo` RENAME TO `Aluno` ");
 				}
 			}).
 			build();

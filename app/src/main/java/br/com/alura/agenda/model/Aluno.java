@@ -12,16 +12,11 @@ public class Aluno implements Serializable{
 	@PrimaryKey(autoGenerate = true)
 	private int id = 0;
 	private String nome;
-	private String sobrenome;
 	private String telefone;
 	private String email;
 
 	public String getNome(){
 		return nome;
-	}
-
-	public String getNomeCompleto(){
-		return nome + " " + sobrenome;
 	}
 
 	public void setNome(String nome){
@@ -66,13 +61,5 @@ public class Aluno implements Serializable{
 		if(getNome().isEmpty()){
 			return false;
 		} else return !getNome().trim().isEmpty();
-	}
-
-	public String getSobrenome(){
-		return sobrenome;
-	}
-
-	public void setSobrenome(String sobrenome){
-		this.sobrenome = sobrenome;
 	}
 }
