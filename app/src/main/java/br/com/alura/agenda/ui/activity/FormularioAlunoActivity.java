@@ -1,17 +1,14 @@
 package br.com.alura.agenda.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import br.com.alura.agenda.R;
-import br.com.alura.agenda.dao.AlunoDao;
-import br.com.alura.agenda.model.Aluno;
-import br.com.alura.agenda.ui.activity.component.FormularioAlunoActivityComponent;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import br.com.alura.agenda.R;
+import br.com.alura.agenda.model.Aluno;
+import br.com.alura.agenda.ui.activity.component.FormularioAlunoActivityComponent;
 
 import static br.com.alura.agenda.ui.activity.ListaAlunosActivity.CHAVE_ALUNO;
 

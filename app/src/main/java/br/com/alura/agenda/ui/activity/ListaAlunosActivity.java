@@ -1,28 +1,23 @@
 package br.com.alura.agenda.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import br.com.alura.agenda.R;
-import br.com.alura.agenda.dao.AlunoDao;
 import br.com.alura.agenda.model.Aluno;
 import br.com.alura.agenda.ui.activity.component.ListaAlunosActivityComponent;
-import br.com.alura.agenda.ui.adapter.ListaAlunoAdapter;
 
 public class ListaAlunosActivity extends AppCompatActivity{
 
-	private static final String TITULO_APPBAR = "Lista de Alunos";
 	public static final String CHAVE_ALUNO = "aluno";
+	private static final String TITULO_APPBAR = "Lista de Alunos";
 	private Intent daListaProForm;
 	private ListaAlunosActivityComponent component;
 

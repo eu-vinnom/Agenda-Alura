@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import br.com.alura.agenda.dao.AlunoDao;
 import br.com.alura.agenda.model.Aluno;
+import br.com.alura.agenda.room.AgendaBD;
+import br.com.alura.agenda.room.AlunoDao;
 
 import static br.com.alura.agenda.ui.activity.ListaAlunosActivity.CHAVE_ALUNO;
 
 public class FormularioAlunoActivityComponent{
-
 
 	private EditText campoNome;
 	private EditText campoTelefone;
@@ -25,7 +25,7 @@ public class FormularioAlunoActivityComponent{
 	public FormularioAlunoActivityComponent(Activity activity, Context context){
 		this.activity = activity;
 		this.context = context;
-		this.alunoDao = new AlunoDao();
+		this.alunoDao = AgendaBD.getInstance(context).getRoomAlunoDao();
 	}
 
 	public void finalizaFormulario(){

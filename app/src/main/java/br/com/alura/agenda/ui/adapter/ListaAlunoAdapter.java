@@ -11,19 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.alura.agenda.R;
-import br.com.alura.agenda.dao.AlunoDao;
 import br.com.alura.agenda.model.Aluno;
+import br.com.alura.agenda.room.AgendaBD;
+import br.com.alura.agenda.room.AlunoDao;
 
 public class ListaAlunoAdapter extends BaseAdapter{
 
-	private final AlunoDao alunoDao = new AlunoDao();
-	private final List<Aluno> alunos = new ArrayList<>(alunoDao.listagem());
+	private final Context context;
+	private AlunoDao alunoDao;
+	private List<Aluno> alunos;
+
 
 	public ListaAlunoAdapter(Context context){
 		this.context = context;
+		alunoDao = AgendaBD.getInstance(context).getRoomAlunoDao();
+		alunos = new ArrayList<>(alunoDao.listagem());
 	}
-
-	private final Context context;
 
 	@Override
 	public int getCount(){

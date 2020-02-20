@@ -7,8 +7,9 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
 import br.com.alura.agenda.R;
-import br.com.alura.agenda.dao.AlunoDao;
 import br.com.alura.agenda.model.Aluno;
+import br.com.alura.agenda.room.AgendaBD;
+import br.com.alura.agenda.room.AlunoDao;
 import br.com.alura.agenda.ui.adapter.ListaAlunoAdapter;
 
 public class ListaAlunosActivityComponent{
@@ -20,7 +21,7 @@ public class ListaAlunosActivityComponent{
 
 	public ListaAlunosActivityComponent(Context context){
 		this.context = context;
-		this.alunoDao = new AlunoDao();
+		this.alunoDao = AgendaBD.getInstance(context).getRoomAlunoDao();
 		this.listaAdapter = new ListaAlunoAdapter(this.context);
 	}
 
