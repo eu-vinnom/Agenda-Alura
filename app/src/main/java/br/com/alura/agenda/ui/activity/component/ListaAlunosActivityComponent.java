@@ -15,6 +15,10 @@ import br.com.alura.agenda.ui.adapter.ListaAlunoAdapter;
 public class ListaAlunosActivityComponent{
 
 
+	private static final String DIALOGO_REMOCAO = "Removendo aluno";
+	private static final String CONFIRMA_REMOCAO = "Gostaria de remover o aluno?";
+	private static final String SIM = "SIM";
+	private static final String NAO = "NÃO";
 	private ListaAlunoAdapter listaAdapter;
 	private AlunoDao alunoDao;
 	private Context context;
@@ -37,13 +41,13 @@ public class ListaAlunosActivityComponent{
 
 	private void geraDialogoRemocaoAluno(final AdapterView.AdapterContextMenuInfo menuInfo){
 		new AlertDialog.Builder(context)
-			.setTitle("Removendo aluno")
-			.setMessage("Gostaria de remover o aluno?")
-			.setPositiveButton("SIM", (dialogInterface, i) -> {
+			.setTitle(DIALOGO_REMOCAO)
+			.setMessage(CONFIRMA_REMOCAO)
+			.setPositiveButton(SIM, (dialogInterface, i) -> {
 				Aluno aluno = listaAdapter.getItem(menuInfo.position);
 				remove(aluno);
 			})
-			.setNegativeButton("NÃO", null)
+			.setNegativeButton(NAO, null)
 			.create()
 			.show();
 	}

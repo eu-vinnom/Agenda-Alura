@@ -8,9 +8,11 @@ public class DataConversor{
 
 	@TypeConverter
 	public Long paraLong(Calendar dataEmCalendar){
-		if(dataEmCalendar != null)
+		if(dataEmCalendar != null){
 			return dataEmCalendar.getTimeInMillis();
-		else return null;
+		} else{
+			return null;
+		}
 	}
 
 	@TypeConverter
@@ -19,7 +21,9 @@ public class DataConversor{
 		if(dataEmLong != null){
 			calendar.setTimeInMillis(dataEmLong);
 			return calendar;
-		} else return null;
+		} else{
+			return null;
+		}
 	}
 
 }

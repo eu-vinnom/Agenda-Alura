@@ -12,7 +12,9 @@ import br.com.alura.agenda.model.Aluno;
 @Dao
 public interface AlunoDao{
 
-	@Query("SELECT * FROM Aluno")
+	String LISTA_TODOS = "SELECT * FROM Aluno";
+
+	@Query(LISTA_TODOS)
 	List<Aluno> listagem();
 
 	@Insert

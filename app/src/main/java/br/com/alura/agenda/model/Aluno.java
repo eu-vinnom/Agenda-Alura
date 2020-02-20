@@ -1,7 +1,6 @@
 package br.com.alura.agenda.model;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import androidx.annotation.NonNull;
@@ -67,7 +66,9 @@ public class Aluno implements Serializable{
 	public boolean naoEhNulo(){
 		if(getNome().isEmpty()){
 			return false;
-		} else return !getNome().trim().isEmpty();
+		} else{
+			return !getNome().trim().isEmpty();
+		}
 	}
 
 	public Calendar getDataInsercao(){
@@ -78,10 +79,10 @@ public class Aluno implements Serializable{
 		this.dataInsercao = dataInsercao;
 	}
 
-	public String getDataFormatada(){
-		SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
-		if(dataInsercao != null)
-			return formatador.format(dataInsercao.getTime());
-		else return "";
-	}
+//	public String getDataFormatada(){
+//		SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
+//		if(dataInsercao != null)
+//			return formatador.format(dataInsercao.getTime());
+//		else return "";
+//	}
 }

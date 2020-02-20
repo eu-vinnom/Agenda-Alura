@@ -14,6 +14,7 @@ import static br.com.alura.agenda.ui.activity.ListaAlunosActivity.CHAVE_ALUNO;
 
 public class FormularioAlunoActivityComponent{
 
+	private static final String AVISO_CAMPO_OBRIGATORIO = "Campo nome é obrigatório!";
 	private EditText campoNome;
 	private EditText campoTelefone;
 	private EditText campoEmail;
@@ -38,7 +39,7 @@ public class FormularioAlunoActivityComponent{
 			}
 			activity.finish();
 		}
-		Toast.makeText(context, "Campo nome é obrigatório!", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, AVISO_CAMPO_OBRIGATORIO, Toast.LENGTH_SHORT).show();
 	}
 
 	private void defineAluno(){
