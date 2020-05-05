@@ -12,19 +12,23 @@ import java.util.List;
 
 import br.com.alura.agenda.R;
 import br.com.alura.agenda.model.Aluno;
+import br.com.alura.agenda.model.Telefone;
 import br.com.alura.agenda.room.AgendaBD;
 import br.com.alura.agenda.room.AlunoDao;
+import br.com.alura.agenda.room.TelefoneDao;
 
 public class ListaAlunoAdapter extends BaseAdapter{
 
 	private final Context context;
-	private AlunoDao alunoDao;
+	private final TelefoneDao telefoneDao;
+	private final AlunoDao alunoDao;
 	private List<Aluno> alunos;
 
 
 	public ListaAlunoAdapter(Context context){
 		this.context = context;
 		alunoDao = AgendaBD.getInstance(context).getRoomAlunoDao();
+		telefoneDao = AgendaBD.getInstance(context).getTelefoneDao();
 		alunos = new ArrayList<>(alunoDao.listagem());
 	}
 
@@ -53,11 +57,14 @@ public class ListaAlunoAdapter extends BaseAdapter{
 		Aluno aluno = alunos.get(posicao);
 		View alunoItemView = LayoutInflater.from(context).inflate(R.layout.item_aluno, viewGroup, false);
 
-		TextView nome = alunoItemView.findViewById(R.id.item_aluno_nome);
-		nome.setText(aluno.getNome());
+		TextView campoNome = alunoItemView.findViewById(R.id.item_aluno_nome);
+		campoNome.setText(aluno.getNome());
 
-		TextView telefone = alunoItemView.findViewById(R.id.item_aluno_telefone);
-		telefone.setText(aluno.getTelefone());
+		TextView campoTelefone = alunoItemView.findViewById(R.id.item_aluno_telefone);
+		Telefone primeiroTelefone = telefoneDao.devolvePrimeiroTelefone(aluno.getId());
+		if(primeiroTelefone != null){
+			campoTelefone.setText(primeiroTelefone.getNumero());
+		}
 
 		return alunoItemView;
 	}

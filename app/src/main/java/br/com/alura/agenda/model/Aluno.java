@@ -13,7 +13,6 @@ public class Aluno implements Serializable{
 	@PrimaryKey(autoGenerate = true)
 	private int id = 0;
 	private String nome;
-	private String telefone;
 	private String email;
 	private Calendar dataInsercao;
 
@@ -35,14 +34,6 @@ public class Aluno implements Serializable{
 
 	public void setId(int id){
 		this.id = id;
-	}
-
-	public String getTelefone(){
-		return telefone;
-	}
-
-	public void setTelefone(String telefone){
-		this.telefone = telefone;
 	}
 
 	public String getEmail(){

@@ -1,16 +1,17 @@
 package br.com.alura.agenda.room;
 
-import java.util.List;
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import java.util.List;
+
 import br.com.alura.agenda.model.Aluno;
 
 @Dao
-public interface AlunoDao{
+public interface AlunoDao {
 
 	String LISTA_TODOS = "SELECT * FROM Aluno";
 
@@ -18,10 +19,10 @@ public interface AlunoDao{
 	List<Aluno> listagem();
 
 	@Insert
-	void salva(Aluno aluno);
+	Long salva(Aluno aluno);
 
 	@Update
-	void edita(Aluno aluno);
+	void atualiza(Aluno aluno);
 
 	@Delete
 	void remove(Aluno aluno);
