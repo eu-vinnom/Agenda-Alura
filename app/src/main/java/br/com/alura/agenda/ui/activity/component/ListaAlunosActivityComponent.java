@@ -6,13 +6,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
+
 import br.com.alura.agenda.R;
 import br.com.alura.agenda.model.Aluno;
 import br.com.alura.agenda.room.AgendaBD;
 import br.com.alura.agenda.room.AlunoDao;
 import br.com.alura.agenda.ui.adapter.ListaAlunoAdapter;
 
-public class ListaAlunosActivityComponent{
+public class ListaAlunosActivityComponent {
 
 
 	private static final String DIALOGO_REMOCAO = "Removendo aluno";
@@ -20,12 +21,10 @@ public class ListaAlunosActivityComponent{
 	private static final String SIM = "SIM";
 	private static final String NAO = "NÃO";
 	private ListaAlunoAdapter listaAdapter;
-	private AlunoDao alunoDao;
 	private Context context;
 
 	public ListaAlunosActivityComponent(Context context){
 		this.context = context;
-		this.alunoDao = AgendaBD.getInstance(context).getRoomAlunoDao();
 		this.listaAdapter = new ListaAlunoAdapter(this.context);
 	}
 
@@ -54,6 +53,7 @@ public class ListaAlunosActivityComponent{
 
 	public void atualizaLista(){
 		listaAdapter.atualizaAdapter();
+		listaAdapter.notifyDataSetChanged();
 	}
 
 	public void defineListaAdapter(ListView listView){
@@ -62,6 +62,6 @@ public class ListaAlunosActivityComponent{
 
 	private void remove(Aluno aluno){
 		listaAdapter.remove(aluno);
-		alunoDao.remove(aluno);
+		listaAdapter.notifyDataSetChanged();
 	}
 }

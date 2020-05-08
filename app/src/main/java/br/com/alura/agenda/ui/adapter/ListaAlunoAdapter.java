@@ -12,24 +12,25 @@ import java.util.List;
 
 import br.com.alura.agenda.R;
 import br.com.alura.agenda.model.Aluno;
-import br.com.alura.agenda.model.Telefone;
 import br.com.alura.agenda.room.AgendaBD;
 import br.com.alura.agenda.room.AlunoDao;
 import br.com.alura.agenda.room.TelefoneDao;
+import br.com.alura.agenda.ui.asynctask.AtualizaListaAsyncTask;
+import br.com.alura.agenda.ui.asynctask.DevolvePrimeiroTelefoneAsyncTask;
+import br.com.alura.agenda.ui.asynctask.RemoveAlunoAsyncTask;
 
-public class ListaAlunoAdapter extends BaseAdapter{
+public class ListaAlunoAdapter extends BaseAdapter {
 
 	private final Context context;
 	private final TelefoneDao telefoneDao;
 	private final AlunoDao alunoDao;
 	private List<Aluno> alunos;
 
-
 	public ListaAlunoAdapter(Context context){
 		this.context = context;
 		alunoDao = AgendaBD.getInstance(context).getRoomAlunoDao();
 		telefoneDao = AgendaBD.getInstance(context).getTelefoneDao();
-		alunos = new ArrayList<>(alunoDao.listagem());
+		alunos = new ArrayList<>();
 	}
 
 	@Override
@@ -61,22 +62,19 @@ public class ListaAlunoAdapter extends BaseAdapter{
 		campoNome.setText(aluno.getNome());
 
 		TextView campoTelefone = alunoItemView.findViewById(R.id.item_aluno_telefone);
-		Telefone primeiroTelefone = telefoneDao.devolvePrimeiroTelefone(aluno.getId());
-		if(primeiroTelefone != null){
-			campoTelefone.setText(primeiroTelefone.getNumero());
-		}
+
+		new DevolvePrimeiroTelefoneAsyncTask(telefoneDao, aluno.getId(), telefone -> {
+			campoTelefone.setText(telefone.getNumero());
+		}).execute();
 
 		return alunoItemView;
 	}
 
 	public void atualizaAdapter(){
-		alunos.clear();
-		alunos.addAll(alunoDao.listagem());
-		notifyDataSetChanged();
+		new AtualizaListaAsyncTask(alunos, alunoDao).execute();
 	}
 
 	public void remove(Aluno aluno){
-		alunos.remove(aluno);
-		notifyDataSetChanged();
+		new RemoveAlunoAsyncTask(aluno, alunos, alunoDao).execute();
 	}
 }

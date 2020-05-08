@@ -27,7 +27,6 @@ public abstract class AgendaBD extends RoomDatabase{
 	public static AgendaBD getInstance(Context contexto){
 		return Room.
 			databaseBuilder(contexto, AgendaBD.class, NOME_AGENDA_BD).
-			allowMainThreadQueries().
 			addMigrations(migrations.getMigrations()).
 			build();
 	}

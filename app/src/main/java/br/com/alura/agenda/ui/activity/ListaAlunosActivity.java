@@ -29,14 +29,14 @@ public class ListaAlunosActivity extends AppCompatActivity{
 
 		component = new ListaAlunosActivityComponent(this);
 		defineFabNovoAluno();
-		listaAlunos();
 	}
 
 	@Override
 	protected void onResume(){
 		super.onResume();
-		daListaProForm = geraIntentProForm();
+		listaAlunos();
 		component.atualizaLista();
+		daListaProForm = geraIntentProForm();
 	}
 
 	private void defineFabNovoAluno(){

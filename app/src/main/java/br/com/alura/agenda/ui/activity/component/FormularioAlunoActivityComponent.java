@@ -13,6 +13,10 @@ import br.com.alura.agenda.model.Telefone;
 import br.com.alura.agenda.room.AgendaBD;
 import br.com.alura.agenda.room.AlunoDao;
 import br.com.alura.agenda.room.TelefoneDao;
+import br.com.alura.agenda.ui.asynctask.AtualizaAlunosAsyncTask;
+import br.com.alura.agenda.ui.asynctask.AtualizaTelefonesAsyncTask;
+import br.com.alura.agenda.ui.asynctask.RecuperaTelefonesAsyncTask;
+import br.com.alura.agenda.ui.asynctask.SalvaAlunoAsyncTask;
 
 import static br.com.alura.agenda.model.TipoTelefone.CELULAR;
 import static br.com.alura.agenda.model.TipoTelefone.FIXO;
@@ -49,7 +53,6 @@ public class FormularioAlunoActivityComponent {
 			} else{
 				salvaAluno();
 			}
-			activity.finish();
 		}
 		Toast.makeText(context, AVISO_CAMPO_OBRIGATORIO, Toast.LENGTH_SHORT).show();
 	}
@@ -61,6 +64,8 @@ public class FormularioAlunoActivityComponent {
 
 		aluno.setNome(nome);
 		aluno.setEmail(email);
+
+		defineTelefones();
 	}
 
 	public void recupera(Intent dadosAluno){
@@ -72,29 +77,30 @@ public class FormularioAlunoActivityComponent {
 	}
 
 	private void salvaAluno(){
-		int alunoId = alunoDao.salva(aluno).intValue();
-		defineTelefones();
-		telefoneDao.salva(new Telefone(numeroFixo, FIXO, alunoId), new Telefone(numeroCelular, CELULAR, alunoId));
+		new SalvaAlunoAsyncTask(alunoDao, telefoneDao, aluno, numeroFixo, numeroCelular, () -> {
+			activity.finish();
+		}).execute();
 
-		Toast.makeText(context, "Aluno " + aluno.getNome() + " salvo!",
-			Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "Aluno " + aluno.getNome() + " salvo!", Toast.LENGTH_SHORT).show();
 	}
 
 	private void atualizaAluno(){
-		alunoDao.atualiza(aluno);
+		new AtualizaAlunosAsyncTask(alunoDao, aluno).execute();
 		defineTelefones();
 		Telefone telefoneFixo = new Telefone(numeroFixo, FIXO, aluno.getId());
 		Telefone telefoneCelular = new Telefone(numeroCelular, CELULAR, aluno.getId());
-
-		for(Telefone telefone : telefones){
-			if(telefone.getTipo() == FIXO){
-				telefoneFixo.setId(telefone.getId());
-			} else{
-				telefoneCelular.setId(telefone.getId());
+		new AtualizaTelefonesAsyncTask(telefoneDao, telefoneFixo, telefoneCelular, telefones, listaTelefones -> {
+			for(Telefone telefone : listaTelefones){
+				if(telefone.getTipo() == FIXO){
+					telefoneFixo.setId(telefone.getId());
+				} else{
+					telefoneCelular.setId(telefone.getId());
+				}
 			}
-		}
+		}, () -> {
+			activity.finish();
+		}).execute();
 
-		telefoneDao.atualiza(telefoneFixo, telefoneCelular);
 		Toast.makeText(context, "Aluno " + aluno.getNome() + " editado!",
 			Toast.LENGTH_SHORT).show();
 	}
@@ -105,14 +111,16 @@ public class FormularioAlunoActivityComponent {
 	}
 
 	private void recuperaTelefones(){
-		telefones = telefoneDao.devolveTodosTelefones(aluno.getId());
-		for(Telefone telefone : telefones){
-			if(telefone.getTipo() == FIXO){
-				campoTelefoneFixo.setText(telefone.getNumero());
-			} else{
-				campoTelefoneCelular.setText(telefone.getNumero());
+		new RecuperaTelefonesAsyncTask(telefones, telefoneDao, aluno, listaTefones -> {
+			telefones = listaTefones;
+			for(Telefone telefone : listaTefones){
+				if(telefone.getTipo() == FIXO){
+					campoTelefoneFixo.setText(telefone.getNumero());
+				} else{
+					campoTelefoneCelular.setText(telefone.getNumero());
+				}
 			}
-		}
+		}).execute();
 	}
 
 	public void setCampoNome(EditText campoNome){
