@@ -11,10 +11,12 @@ public class AtualizaListaAsyncTask extends AsyncTask<Void, Void, List<Aluno>> {
 
 	private final List<Aluno> alunos;
 	private final AlunoDao alunoDao;
+	private final DepoisDaExecucao depoisDaExecucao;
 
-	public AtualizaListaAsyncTask(List<Aluno> alunos, AlunoDao alunoDao){
+	public AtualizaListaAsyncTask(List<Aluno> alunos, AlunoDao alunoDao, DepoisDaExecucao depoisDaExecucao){
 		this.alunos = alunos;
 		this.alunoDao = alunoDao;
+		this.depoisDaExecucao = depoisDaExecucao;
 	}
 
 	@Override
@@ -28,5 +30,10 @@ public class AtualizaListaAsyncTask extends AsyncTask<Void, Void, List<Aluno>> {
 		super.onPostExecute(alunos);
 		alunos.clear();
 		alunos.addAll(todosAlunos);
+		depoisDaExecucao.executa();
+	}
+
+	public interface DepoisDaExecucao{
+		void executa();
 	}
 }

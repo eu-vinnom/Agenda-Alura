@@ -53,7 +53,6 @@ public class ListaAlunosActivityComponent {
 
 	public void atualizaLista(){
 		listaAdapter.atualizaAdapter();
-		listaAdapter.notifyDataSetChanged();
 	}
 
 	public void defineListaAdapter(ListView listView){

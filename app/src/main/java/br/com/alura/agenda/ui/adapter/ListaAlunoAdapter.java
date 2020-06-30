@@ -26,7 +26,7 @@ public class ListaAlunoAdapter extends BaseAdapter {
 	private final AlunoDao alunoDao;
 	private List<Aluno> alunos;
 
-	public ListaAlunoAdapter(Context context){
+	public ListaAlunoAdapter(Context context) {
 		this.context = context;
 		alunoDao = AgendaBD.getInstance(context).getRoomAlunoDao();
 		telefoneDao = AgendaBD.getInstance(context).getTelefoneDao();
@@ -34,27 +34,27 @@ public class ListaAlunoAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public int getCount(){
+	public int getCount() {
 		return alunos.size();
 	}
 
 	@Override
-	public Aluno getItem(int posicao){
+	public Aluno getItem(int posicao) {
 		return alunos.get(posicao);
 	}
 
 	@Override
-	public long getItemId(int posicao){
+	public long getItemId(int posicao) {
 		return alunos.get(posicao).getId();
 	}
 
 	@Override
-	public View getView(int posicao, View view, ViewGroup viewGroup){
+	public View getView(int posicao, View view, ViewGroup viewGroup) {
 
 		return defineAlunoItemView(posicao, viewGroup);
 	}
 
-	private View defineAlunoItemView(int posicao, ViewGroup viewGroup){
+	private View defineAlunoItemView(int posicao, ViewGroup viewGroup) {
 		Aluno aluno = alunos.get(posicao);
 		View alunoItemView = LayoutInflater.from(context).inflate(R.layout.item_aluno, viewGroup, false);
 
@@ -70,11 +70,11 @@ public class ListaAlunoAdapter extends BaseAdapter {
 		return alunoItemView;
 	}
 
-	public void atualizaAdapter(){
-		new AtualizaListaAsyncTask(alunos, alunoDao).execute();
+	public void atualizaAdapter() {
+		new AtualizaListaAsyncTask(alunos, alunoDao, this::notifyDataSetChanged).execute();
 	}
 
-	public void remove(Aluno aluno){
+	public void remove(Aluno aluno) {
 		new RemoveAlunoAsyncTask(aluno, alunos, alunoDao).execute();
 	}
 }
